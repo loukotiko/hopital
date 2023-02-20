@@ -3,10 +3,17 @@
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<style>
+			body {
+				background: #FEFEFE;
+				padding: 30px;
+			}
+
 			#rules {
 				display: grid;
-				grid: auto-flow / repeat(auto-fill, 160px);
+				grid: auto-flow / repeat(auto-fill, 240px);
 				grid-gap: 3px;
+				margin: 20px 0;
+				padding: 0;
 			}
 
 			#rules li {
@@ -15,16 +22,54 @@
 				list-style-type: none;
 			}
 
-			#rules li p {
+			#rules li.pos {
+				background: #DEFFDE;
+			}
+
+
+			#rules li.neg {
+				background: #FFDEDE;
+			}
+
+			#rules li p, #rules li b {
 				display: inline-block;
-				margin: 0;
+				margin: 0 2px;
 				padding: 6px;
 				width: 1.3em;
-				height: 1.3em;
+				height: 1.5em;
+				line-height: 1.5em;
 				text-align: center;
 				border: 1px solid #CCCCCC;
 				background: white;
 				vertical-align: middle;
+				border-radius: 3px;
+			}
+			#rules li b {
+				border: none;
+				background: grey;
+				color: white;
+				float: right;
+				border-radius: 100%;
+				width: 1.3em;
+				height: 1.3em;
+				line-height: 1.3em;
+				margin-top: 0.2em;
+			}
+			#rules li b::before {
+				content: "?";
+				display: inline-block;
+			}
+			#rules li.pos b {
+				background: #00CC00;
+			}
+			#rules li.neg b {
+				background: #CC0000;
+			}
+			#rules li.pos b::before {
+				content: "+";
+			}
+			#rules li.neg b::before {
+				content: "-";
 			}
 		</style>
 		<script>
@@ -42,22 +87,26 @@ function randomIntFromInterval(min, max) { // min and max included
 				let rules = [];
 				$rules.innerHTML = "";
 
-				const symbolsPerRule = [1,1,2,2,2,2,2,3,3,3];
-				symbolsPerRule.forEach(nbSymbols => {
+				const symbolsPerRule = [1,1,2,2,2,2,3,3];
+				symbolsPerRule.forEach((nbSymbols, i) => {
 					console.log(nbSymbols);
 					let rule = "";
 					const $rule = document.createElement('li');
+					do {
+						for(let i = 0; i < nbSymbols ; i++) {
+							const symbol = allSymbols[randomIntFromInterval(0, allSymbols.length - 1)];
+							rule += symbol;
+							$rule.innerHTML += `<p>${symbol}</p>`;
+						}
+					} while (rules.indexOf(rule) != -1);
 
-					for(let i = 0; i < nbSymbols ; i++) {
-						const symbol = allSymbols[randomIntFromInterval(0, allSymbols.length - 1)];
-						rule += symbol;
-						$rule.innerHTML += `<p>${symbol}</p>`;
-					}
-					console.log(rule);
-					if(rules.indexOf(rule) === -1) {
-						rules.push(rule);
-						$rules.appendChild($rule);
-					}
+					const $result = document.createElement('b');
+					$result.innerHTML = nbSymbols;
+					$rule.appendChild($result);
+					$rule.classList.add(i%2 ? "pos" : "neg");
+
+					rules.push(rule);
+					$rules.appendChild($rule);
 				});
 			}
 		</script>
