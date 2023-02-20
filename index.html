@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+	<head>
+		<style>
+			#rules {
+				display: grid;
+				grid: auto-flow / repeat(auto-fill, 160px);
+				grid-gap: 3px;
+			}
+
+			#rules li {
+				background: #DEDEDE;
+				padding: 6px 12px;
+				list-style-type: none;
+			}
+
+			#rules li p {
+				display: inline-block;
+				margin: 0;
+				padding: 6px;
+				width: 1.3em;
+				height: 1.3em;
+				text-align: center;
+				border: 1px solid #CCCCCC;
+				background: white;
+				vertical-align: middle;
+			}
+		</style>
+		<script>
+			const colors = ["🟠", "🔴", "🔵", "🟢", "⚫"];
+			const values = ["1","2","3","4","5"];
+			const allSymbols = [...colors, ...values];
+			
+function randomIntFromInterval(min, max) { // min and max included 
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+
+			function shuffle() {
+				const $rules = document.querySelector("#rules");
+				let rules = [];
+				$rules.innerHTML = "";
+
+				const symbolsPerRule = [1,1,2,2,2,2,2,3,3,3];
+				symbolsPerRule.forEach(nbSymbols => {
+					console.log(nbSymbols);
+					let rule = "";
+					const $rule = document.createElement('li');
+
+					for(let i = 0; i < nbSymbols ; i++) {
+						const symbol = allSymbols[randomIntFromInterval(0, allSymbols.length - 1)];
+						rule += symbol;
+						$rule.innerHTML += `<p>${symbol}</p>`;
+					}
+					console.log(rule);
+					if(rules.indexOf(rule) === -1) {
+						rules.push(rule);
+						$rules.appendChild($rule);
+					}
+				});
+			}
+		</script>
+	</head>
+
+	<body>
+		<button onclick="shuffle()">Nouvelles règles</button>
+		<ul id="rules"/>
+	</body>
+</html>
